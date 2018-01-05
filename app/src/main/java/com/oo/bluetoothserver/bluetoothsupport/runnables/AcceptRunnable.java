@@ -19,6 +19,7 @@ public class AcceptRunnable implements Runnable {
      * 主要执行的是 通过阻塞等待新的连接接入
      * 并提供一个方法 获取新接入的 socket
      */
+    private final String TAG = getClass().getSimpleName();
 
     private BluetoothSocket socket;
     private String name;
@@ -59,18 +60,25 @@ public class AcceptRunnable implements Runnable {
         }
 
         try {
-            BluetoothServerSocket serverSocket = secquare ?
-                    BluetoothAdapter.getDefaultAdapter()
-                            .listenUsingRfcommWithServiceRecord(this.name, UUID.fromString(this.uuid)) :
-                    BluetoothAdapter.getDefaultAdapter()
-                            .listenUsingInsecureRfcommWithServiceRecord(this.name, UUID.fromString(this.uuid));
+            BluetoothServerSocket serverSocket;
+//                    BluetoothAdapter.getDefaultAdapter()
+//                            .listenUsingRfcommWithServiceRecord(this.name, UUID.fromString(this.uuid)) :
+//                    BluetoothAdapter.getDefaultAdapter()
+//                            .listenUsingInsecureRfcommWithServiceRecord(this.name, UUID.fromString(this.uuid));
 
-            this.socket = serverSocket.accept(timeout);
+            serverSocket = BluetoothAdapter.getDefaultAdapter().listenUsingInsecureRfcommWithServiceRecord(this.name, UUID.fromString(uuid));
+            this.socket = serverSocket.accept();
+
             if (callback != null) {
                 callback.onConnected(socket);
                 //释放线程内的引用对象
-                releaseObject();
+//                releaseObject();
             }
+//            while (socket.isConnected()) {
+//                Thread.sleep(1000);
+//                Log.i(TAG, "run: serversocket is connected ");
+//            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

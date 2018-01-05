@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothClent bluetoothClent;
 
     private ArrayList<BluetoothDevice> bluetoothDevices;
-
     private BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

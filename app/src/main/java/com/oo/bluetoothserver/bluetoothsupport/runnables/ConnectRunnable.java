@@ -19,6 +19,7 @@ public class ConnectRunnable implements Runnable {
      * 由 bluetoothdevice 发起 connect 的阻塞过程
      */
 
+    private final String TAG = getClass().getSimpleName();
     private String uuid;
     private boolean secquare = false;
     private ConnectToServerCallback callback;
@@ -47,15 +48,19 @@ public class ConnectRunnable implements Runnable {
 
 
         try {
-            BluetoothSocket socket = secquare ?
-                    device.createRfcommSocketToServiceRecord(UUID.fromString(uuid)) :
-                    device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(uuid));
+            BluetoothSocket socket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(uuid));
+//            BluetoothSocket socket = secquare ?
+//                    device.createRfcommSocketToServiceRecord(UUID.fromString(uuid)) :
+//                    device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(uuid));
             socket.connect();
 
             if (callback != null) {
                 callback.onConnected(socket);
-                socket = null;
             }
+//            while (socket.isConnected()) {
+//                Thread.sleep(1000);
+//                Log.i(TAG, "run:client socket is connected ");
+//            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,7 +68,7 @@ public class ConnectRunnable implements Runnable {
     }
 
 
-    interface ConnectToServerCallback {
+    public interface ConnectToServerCallback {
         void onConnected(BluetoothSocket socket);
     }
 }
