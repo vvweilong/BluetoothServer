@@ -15,3 +15,13 @@
     SendMsgRunnable 是发送文字信息的线程 随用随创建 不阻塞
 
     BluetootServer/Client 内部持有线程池
+    
+    
+##  结构介绍
+    首先建立两端（client 与 server） client 执行 discover 操作 ，然后连接扫描到的 server
+    这里通过 BluetoothClient 执行 connectRunnable 获取连接 socket 
+    服务端 BluetoothServer 执行 acceptRunnable 等待连接 连接后获取 socket
+    在完成连接后 两端分别开启 listenRunnable 来监听socket 的 inputstream 来获取对方发来的信息 ，
+    并通过handler 返回主线程 再通过回调接口通知 UI。
+    
+    
